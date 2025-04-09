@@ -7,3 +7,4 @@ Files:
 - workout_dashboard.py: Streamlit app used for creating a dashboard to help track progress of lifts over time.
 - workout_logger.py: Streamlit app used for logging workouts.
 - requirements.txt: Required Python packages.
+- launch.json: config file to allow streamlit apps to be launched from vscode debug menu. Place into .vscode
