@@ -3,6 +3,10 @@ import pandas as pd
 import os
 import json
 
+#Notes
+#In looking over this, the exercise list is not being utilized at all. Doesn't really impact anything just type it manually.
+#May fix in the future, but the app works for now.
+
 # ---------- Config ----------
 DATA_DIR = "data"
 TEMPLATE_DIR = os.path.join(DATA_DIR, "templates")
@@ -54,7 +58,7 @@ st.markdown("### 🏗️ Build Your Template")
 exercise_list = load_exercises()
 
 default_df = pd.DataFrame(preset_data if template_mode == "Edit Existing" and template_name else [], columns=[
-    "Exercise", "Set Type", "Weight", "Reps", "RPE", "Notes"
+    "Exercise", "Set Type", "Weight", "Reps", "RIR", "Notes"
 ])
 
 edited_df = st.data_editor(default_df, num_rows="dynamic", use_container_width=True)

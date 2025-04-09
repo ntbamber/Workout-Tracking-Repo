@@ -20,7 +20,7 @@ if not os.path.exists(EXERCISE_FILE):
 if not os.path.exists(LOG_FILE):
     pd.DataFrame(columns=[
         "Date", "Workout Title", "Exercise", "Set Order", "Set Type",
-        "Weight", "Reps", "RPE", "Notes"
+        "Weight", "Reps", "RIR", "Notes"
     ]).to_csv(LOG_FILE, index=False)
 
 # ---------- Load exercises ----------
@@ -60,7 +60,7 @@ if selected_template != "None":
 
 else:
     session_df = pd.DataFrame(columns=[
-        "Exercise", "Set Type", "Weight", "Reps", "RPE", "Notes"
+        "Exercise", "Set Type", "Weight", "Reps", "RIR", "Notes"
     ])
 
 # ---------- Add set manually ----------

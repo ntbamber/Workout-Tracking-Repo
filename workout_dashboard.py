@@ -4,6 +4,7 @@ import os
 import plotly.express as px
 import plotly.graph_objects as go
 
+
 # --- File paths ---
 DATA_DIR = "data"
 LOG_FILE = os.path.join(DATA_DIR, "lifting_log.csv")
@@ -22,6 +23,8 @@ def compute_estimated_1rm(df):
     return df
 
 def compute_session_average_load(df):
+#The math for this function doesnt really work the best. I may rework it to be (reps+rir) * weight / sets or just (reps+rir) * weight for the top set only
+#The goal of this function to calculate if you are progressing by factoring both weight and reps
     df["Volume"] = df["Weight"] * df["Reps"]
     grouped = df.groupby(["Exercise", df["Date"].dt.date])
     avg_load_df = grouped.agg(
@@ -126,7 +129,7 @@ if os.path.exists(LOG_FILE):
     st.markdown("---")
     st.subheader("📋 Set-Level Data")
     st.dataframe(df_filtered[[ 
-        "Date", "Workout Title", "Exercise", "Set Type", "Weight", "Reps", "RPE", "Estimated 1RM", "Volume"
+        "Date", "Workout Title", "Exercise", "Set Type", "Weight", "Reps", "RIR", "Estimated 1RM", "Volume"
     ]].sort_values("Date", ascending=False), use_container_width=True)
 
 else:

@@ -9,7 +9,7 @@ LOG_FILE = os.path.join(DATA_DIR, "lifting_log.csv")
 
 # --- Streamlit UI ---
 st.set_page_config(page_title="Strong CSV Converter", layout="wide")
-st.title("📥 Strong CSV to Lifting Log Converter")
+st.title("📥 Strong CSV to Lifting Log Converter (RIR-based)")
 
 uploaded_file = st.file_uploader("Upload your Strong export (.csv)", type=["csv"])
 
@@ -26,8 +26,6 @@ if uploaded_file:
 
         # Always mark sets with <=2 reps as warmups
         force_warmup = group["Reps"] <= 2
-
-        # Additional warmups: lighter sets before top set
         lighter_before_top = (group["Weight"] < max_weight) & (group.index < max_weight_idx)
 
         is_warmup = force_warmup | lighter_before_top
@@ -38,16 +36,19 @@ if uploaded_file:
     # --- Auto-fill Workout Title from 'Workout Name' ---
     df["Workout Title"] = df["Workout Name"].fillna("")
 
+    # --- Convert RPE to RIR ---
+    df["RIR"] = 10 - df["RPE"]
+    df["RIR"] = df["RIR"].clip(lower=0, upper=10)
+
     # --- Reformat for export ---
     export_df = df.rename(columns={
         "Exercise Name": "Exercise",
-        "RPE": "RPE",
         "Notes": "Notes"
     })
 
     final_df = export_df[[
         "Date", "Workout Title", "Exercise", "Set Order", "Set Type",
-        "Weight", "Reps", "RPE", "Notes"
+        "Weight", "Reps", "RIR", "Notes"
     ]]
 
     # --- Display + download ---
@@ -73,7 +74,6 @@ if uploaded_file:
             existing_log = pd.read_csv(LOG_FILE)
             combined = pd.concat([existing_log, final_df], ignore_index=True)
 
-            # Drop duplicates based on key workout identifiers
             combined.drop_duplicates(
                 subset=["Date", "Exercise", "Set Order", "Weight", "Reps"],
                 keep="first",
